@@ -1,6 +1,6 @@
 {
   "name": "react-protected-text",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Protect text or link from crawler / bot",
   "author": "Julien CROCHET",
   "private": false,
@@ -30,7 +30,7 @@
     "test:coverage": "jest --coverage"
   },
   "peerDependencies": {
-    "prop-types": "^15.6.0",
+    "prop-types": "^15.7.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   },
