@@ -1,6 +1,6 @@
 {
   "name": "react-protected-text",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Protect text or link from crawler / bot",
   "author": "Julien CROCHET",
   "private": false,
