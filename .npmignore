@@ -1,4 +1,7 @@
 src
+coverage
 webpack.config.js
 .babelrc
 .eslintrc.js
+jest.config.js
+enzyme.config.js

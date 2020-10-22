@@ -1,26 +1,155 @@
-> This project is created to simplify the process of publishing a React component to npm. For a full tutorial on publishing React component to npm, please refer to [this guide](https://medium.com/groftware/how-to-publish-your-react-component-on-npm-9cf48d91944d)
+# react-protected-text
 
-## Guide
-1. Replace contents in `/src` with your React component.
-1. Edit `webpack.config.js`, replace the following:
-	1. `entry: './src/YOUR_COMPONENT.js'` Replace value of `entry` to path to the entry point of your component.
-	1. Replace 	`output.filename` to the name of your component
-	```
-		output: {
-			path: path.resolve('lib'),
-			filename: 'YOUR_COMPONENT.js',
-			libraryTarget: 'commonjs2',
-  	},
-	```
-1. Edit `package.json`, replace the following:
-	1. `"name": "YOUR_PACKAGE_NAME"` Replace the value of `name` to your package name. This will be the name of the package that is published to `npm` and the name that is used when other people install your package using `npm install YOUR_PACKAGE_NAME`.
-	1. Update the values of `version` and `description` to accordingly.
-	1. `"main": "./lib/YOUR_COMPONENT.js"` replace `YOUR_COMPONENT.js` with the name that you've set in `output.filename` during Step #2
-	1. If your component uses any other dependencies, make sure to add them into the `peerDependencies` list.
-1. Building your component by running `npm build` in your command line. This would generate the folder `/lib` which includes your component.
-1. Publishing to [npm](https://www.npmjs.com/)
-	1. Make sure you've [registered an npm account](https://www.npmjs.com/signup)
-	1. Run `npm login` in your command line, and enter your credentials.
-	1. Run `npm publish`, and your React component will be uploaded to npm! You can find it at https://www.npmjs.com/package/[YOUR PACKAGE NAME] or your npm profile.
+React component for text & link protection from crawlers
 
-1. To update your package, make sure you remember to increment the `version` in `package.json`, and then perform Step #5 again.
+![Build][build-badge]
+![Coverage][coverage-badge]
+[![Size][size-badge]][size]
+
+## Install
+
+[![NPM info][npm-badge]][npm]
+
+```sh
+npm install react-protected-text
+```
+
+## Why?
+
+Do you want to display text (name, phone, address) or link (email) but prevent web crawlers from stealing them from your website ?
+If you just simply publish an email address on a website you can expect tons of spam.
+This is why you have to make sure you never add your email or phone to any website as plain text or link which is visible by bots.
+
+## How it works
+
+It use a mixture of pure text in DOM and CSS.
+The text is partially rendered in reverse in DOM and the rest is prepend/append by CSS. CSS will then reverse all text again.
+Link URL is obfuscated until an onClick event occur.
+This making the text or link useless for spammers, but user friendly on a browser.
+
+Under the hood, it use the duo of CSS properties _unicode-bidi: bidi-override;_ and _direction: rtl;_
+
+## Use
+
+#### Basic hello world:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ProtectedText from 'react-protected-text';
+
+ReactDOM.render(<ProtectedText text="Hello World!" />, document.body);
+```
+
+<details>
+<summary>Show rendered HTML</summary>
+
+```jsx
+<span class="protected-text">
+  <style type="text/css">
+    * {
+      unicode-bidi: bidi-override; direction: rtl;
+    }
+    .protected-text > *:before {
+      content: "!dlr" 
+    }
+    .protected-text > *:after {
+      content: "lleH"
+    }
+  </style>
+  <span>oW o</span>
+</span>
+```
+
+</details>       
+<details>
+<summary>Show human interaction</summary>
+
+```jsx
+<span>Hello World!</span>
+```
+
+</details>
+
+#### Basic link:
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ProtectedText from 'react-protected-text';
+
+ReactDOM.render(
+  <ProtectedText
+    text="hello@world.com"
+    href="mailto:hello@world.com"
+    hrefHeaders={{ subject: 'Contact', cc: 'john@doe.com' }}
+  />,
+  document.body,
+);
+```
+
+<details>
+<summary>Show rendered HTML</summary>
+
+```jsx
+<span class="protected-text">
+  <style type="text/css">
+    * {
+      unicode-bidi: bidi-override; direction: rtl;
+    }
+    *:before {
+      content: "moc.d"
+    }
+    *:after {
+      content: "olleh"
+    }
+  </style>
+  <a href="https://click">lrow@</a>
+</span>
+```
+
+</details>
+<details>
+<summary>Show human interaction</summary>
+
+```jsx
+<a href="mailto:hello@world.com?subject=Contact@cc=john@doe.com">hello@world.com</a>
+```
+
+</details>
+
+## Props
+
+| Prop          | Type     | Default         | Description                                                             |
+| ------------- | -------- | --------------- | ----------------------------------------------------------------------- |
+| text          | _string_ | ''              | The text to display                                                     |
+| href          | _string_ | ''              | Target URL for link.<br>Support of mailto:, tel:, sms:, :facetime, ect. |
+| hrefHeaders   | _object_ | null            | Parameters added to URL:<br>subject, cc, bcc, body, ect.                |
+| className     | _string_ | ''              | Custom class name                                                       |
+| protectedHref | _string_ | 'https://click' | URL to show when obfuscated                                             |
+
+## Browsers Compatibility
+
+Component was tested on following browsers:
+
+- Chrome (Desktop + Mobile)
+- Firefox
+- Safari (Desktop + Mobile)
+- Edge
+- Internet Explorer 11
+
+## Disclaimer
+This solution will work while crawler does not detect it. Technicaly is it still possible de retrieve whole text but the component make it harder.
+
+## License
+
+[MIT][license] © [Julien CROCHET][author]
+
+[build-badge]: https://img.shields.io/static/v1?label=build&message=passing&color=brightgreen
+[size-badge]: https://img.shields.io/bundlephobia/minzip/react-protected-text
+[coverage-badge]: https://img.shields.io/static/v1?label=coverage&message=100%&color=brightgreen
+[size]: https://bundlephobia.com/result?p=react-protected-text
+[npm-badge]: https://nodei.co/npm/react-protected-text.png?downloads=true
+[npm]: https://www.npmjs.com/package/react-protected-text
+[license]: LICENSE
+[author]: https://www.crochet.me
