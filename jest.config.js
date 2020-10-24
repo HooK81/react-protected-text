@@ -34,4 +34,14 @@ module.exports = {
     
     // Indicates whether each individual test should be reported during the run
     verbose: false,
+
+    // Coverage Threshold
+    coverageThreshold: {
+      global: {
+        statements: 100,
+        branches: 100,
+        functions: 100,
+        lines: 100,
+      }
+    }
   };

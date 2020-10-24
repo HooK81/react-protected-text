@@ -1,6 +1,6 @@
 # react-protected-text
 
-React component for text & link protection from crawlers
+React component for text & link protection from web crawlers / bots
 
 ![Build][build-badge]
 ![Coverage][coverage-badge]
@@ -22,8 +22,8 @@ This is why you have to make sure you never add your email or phone to any websi
 
 ## How it works
 
-It use a mixture of pure text in DOM and CSS.
-The text is partially rendered in reverse in DOM and the rest is prepend/append by CSS. CSS will then reverse all text again.
+It use a mixture of pure text in HTML and CSS.
+The text is partially rendered in reverse in HTML and the rest is prepend/append by CSS. CSS will then reverse all text again.
 Link URL is obfuscated until an onClick event occur.
 This making the text or link useless for spammers, but user friendly on a browser.
 
@@ -118,15 +118,20 @@ ReactDOM.render(
 
 </details>
 
+## What about copying to clipboard ?
+Using CSS _unicode-bidi: bidi-override;_ and _direction: rtl;_ will cause one drawback: The user can no longer copy text to clipboard.
+This is a small price to pay in my view. 
+
 ## Props
 
-| Prop          | Type     | Default         | Description                                                             |
-| ------------- | -------- | --------------- | ----------------------------------------------------------------------- |
-| text          | _string_ | ''              | The text to display                                                     |
+| Prop          | Type     | Default         | Description |
+| --------------| -------- | --------------- | - |
+| text          | _string_ | ''              | The text to display |
 | href          | _string_ | ''              | Target URL for link.<br>Support of mailto:, tel:, sms:, :facetime, ect. |
-| hrefHeaders   | _object_ | null            | Parameters added to URL:<br>subject, cc, bcc, body, ect.                |
-| className     | _string_ | ''              | Custom class name                                                       |
-| protectedHref | _string_ | 'https://click' | URL to show when obfuscated                                             |
+| onlyHTML      | _bool_   | false           | Prevent use of CSS pseudo-class. Obfuscation is done only in HTML.<br>This will reduce level of protection. |
+| hrefHeaders   | _object_ | null            | Parameters added to URL:<br>subject, cc, bcc, body, ect. |
+| className     | _string_ | ''              | Custom class name |
+| protectedHref | _string_ | 'https://click' | URL to show when obfuscated |
 
 ## Browsers Compatibility
 

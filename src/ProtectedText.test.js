@@ -1,8 +1,3 @@
-/**
- * ProtectedText Test Suites
- * @author Julien CROCHET <julien@crochet.me>
- */
-
 import React from 'react';
 import { mount } from 'enzyme';
 import { ProtectedText } from './ProtectedText.js';
@@ -19,12 +14,20 @@ describe('ProtectedText for Text', () => {
 
   it('Should ProtectedText render without text', () => {
     const wrapper = mount(<ProtectedText />);
-    expect(wrapper.find('.protected-text span')).toHaveLength(0);
+    expect(wrapper.find('.protected-text span')).toHaveLength(1);
+    expect(wrapper.find('.protected-text span').text()).toBe('');
   });
 
   it('Should ProtectedText render with empty text', () => {
     const wrapper = mount(<ProtectedText text="" />);
-    expect(wrapper.find('.protected-text span')).toHaveLength(0);
+    expect(wrapper.find('.protected-text span')).toHaveLength(1);
+    expect(wrapper.find('.protected-text span').text()).toBe('');
+  });
+
+  it('Should ProtectedText render without text and onlyHTML', () => {
+    const wrapper = mount(<ProtectedText text="" onlyHTML={true}/>);
+    expect(wrapper.find('.protected-text span')).toHaveLength(1);
+    expect(wrapper.find('.protected-text span').text()).toBe('');
   });
 
   it('Should ProtectedText render with a text', () => {
@@ -33,6 +36,30 @@ describe('ProtectedText for Text', () => {
     expect(wrapper.find('style').text().replace(/\s/g, '')).toMatch(':before{content:"ra"'); //[ra]boof
     expect(wrapper.find('.protected-text span').text()).toBe('bo'); //ra[bo]of
     expect(wrapper.find('style').text().replace(/\s/g, '')).toMatch(':after{content:"of"'); //rabo[of]
+  });
+
+  it('Should ProtectedText render with a single character text', () => {
+    const wrapper = mount(<ProtectedText text="a" />);
+    expect(wrapper.find('.protected-text span')).toHaveLength(1);
+    expect(wrapper.find('style').text().replace(/\s/g, '')).toMatch(':before{content:"a"'); // charracter only in :before pseudo class
+    expect(wrapper.find('.protected-text span').text()).toBe('');
+    expect(wrapper.find('style').text().replace(/\s/g, '')).toMatch(':after{content:""');
+  });
+
+  it('Should ProtectedText render with a 2 characters text', () => {
+    const wrapper = mount(<ProtectedText text="ab" />);
+    expect(wrapper.find('.protected-text span')).toHaveLength(1);
+    expect(wrapper.find('style').text().replace(/\s/g, '')).toMatch(':before{content:"b"');
+    expect(wrapper.find('.protected-text span').text()).toBe('a');
+    expect(wrapper.find('style').text().replace(/\s/g, '')).toMatch(':after{content:""');
+  });
+
+  it('Should ProtectedText render with a text with onlyHTML', () => {
+    const wrapper = mount(<ProtectedText text="foobar" onlyHTML={true} />);
+    expect(wrapper.find('.protected-text span')).toHaveLength(1);
+    expect(wrapper.find('style').text().replace(/\s/g, '')).not.toMatch(':before');
+    expect(wrapper.find('style').text().replace(/\s/g, '')).not.toMatch(':after'); 
+    expect(wrapper.find('.protected-text span').text()).toBe('raboof');
   });
 
   it('Should ProtectedText render a text with custom ClassName', () => {

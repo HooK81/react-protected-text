@@ -1,15 +1,10 @@
-/**
- * ProtectedText
- * @author Julien CROCHET <julien@crochet.me>
- */
-
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Style from 'style-it';
 
 /**
  * ProtectedText Component
- * @param object props
+ * @param {ProtectedText.propTypes} props
  */
 export function ProtectedText(props) {
   const [domText, setDomText] = useState('');
@@ -22,10 +17,15 @@ export function ProtectedText(props) {
    */
   const reverseAndSplit = useCallback(() => {
     const reverse = reverseWrappers(props.text.split('').reverse().join(''));
-    const parts = split(reverse);
+    let parts;
+    if (props.onlyHTML) {
+      parts = [reverse];
+    } else {
+      parts = split(reverse);
+    }
 
     return parts;
-  }, [props.text]);
+  }, [props.text, props.onlyHTML]);
 
   /**
    * Split text in 3 parts
@@ -59,16 +59,23 @@ export function ProtectedText(props) {
    */
   useEffect(() => {
     const parts = reverseAndSplit();
-    setBeforeText(parts[0] ? parts[0] : '');
-    setDomText(parts[1] ? parts[1] : '');
-    setAfterText(parts[2] ? parts[2] : '');
-  }, [props.text, reverseAndSplit]);
+
+    if (props.onlyHTML) {
+      setBeforeText('');
+      setDomText(parts[0] ? parts[0] : '');
+      setAfterText('');
+    } else {
+      setBeforeText(parts[0] ? parts[0] : '');
+      setDomText(parts[1] ? parts[1] : '');
+      setAfterText(parts[2] ? parts[2] : '');
+    }
+  }, [props.text, props.onlyHTML, reverseAndSplit]);
 
   /**
    * Render Text
    */
   function renderText() {
-    const { text, href, customClassName, protectedHref, hrefHeaders, ...others } = props;
+    const { text, href, className, protectedHref, hrefHeaders, onlyHTML, ...others } = props;
 
     return <span {...others}>{domText}</span>;
   }
@@ -77,7 +84,7 @@ export function ProtectedText(props) {
    * Render Link
    */
   function renderLink() {
-    const { text, href, customClassName, protectedHref, hrefHeaders, ...others } = props;
+    const { text, href, className, protectedHref, hrefHeaders, onlyHTML, ...others } = props;
 
     return (
       <a href={props.protectedHref} onClick={onLinkClick} {...others}>
@@ -108,8 +115,6 @@ export function ProtectedText(props) {
     }
   }
 
-  if (!beforeText) return null; // empty string, nothing to render
-
   // Render Component
   return (
     <Style>
@@ -117,14 +122,16 @@ export function ProtectedText(props) {
         * {
           unicode-bidi: bidi-override;
           direction: rtl;
-        }
+        }` +
+        (!props.onlyHTML
+          ? `
         *:before {
           content: "${beforeText}"
         }
         *:after {
           content: "${afterText}"
-        }
-      `}
+        }`
+          : '')}
       <span className={`protected-text ${props.className}`}>
         {!props.href && renderText()}
         {props.href && renderLink()}
@@ -137,13 +144,39 @@ export default ProtectedText;
 ProtectedText.defaultProps = {
   text: '',
   href: '',
+  onlyHTML: false,
   className: '',
   protectedHref: 'https://click',
 };
+
 ProtectedText.propTypes = {
+  /**
+   * Text to render
+   */
   text: PropTypes.string.isRequired,
+
+  /**
+   * URL for link
+   */
   href: PropTypes.string,
+
+  /**
+   * Force text to render only in HTML and prevent use of CSS pseudo-class
+   */
+  onlyHTML: PropTypes.bool,
+
+  /**
+   * Additionnal parameters for link
+   */
   hrefHeaders: PropTypes.object,
+
+  /**
+   * Custom class name
+   */
   className: PropTypes.string,
+
+  /**
+   * Custom obfuscated url
+   */
   protectedHref: PropTypes.string,
 };
