@@ -18,16 +18,16 @@ npm install react-protected-text
 
 Do you want to display text (name, phone, address) or link (email) but prevent web crawlers from stealing them from your website ?
 If you just simply publish an email address on a website you can expect tons of spam.
-This is why you have to make sure you never add your email or phone to any website as plain text or link which is visible by bots.
+This is why you have to make sure you never add your email or phone to any website as plain text which is visible by bots.
 
 ## How it works
 
-It use a mixture of pure text in HTML and CSS.
+The component uses a mixture of pure text in HTML and CSS.
 The text is partially rendered in reverse in HTML and the rest is prepend/append by CSS. CSS will then reverse all text again.
 Link URL is obfuscated until an onClick event occur.
 This making the text or link useless for spammers, but user friendly on a browser.
 
-Under the hood, it use the duo of CSS properties _unicode-bidi: bidi-override;_ and _direction: rtl;_
+Under the hood, it uses the duo of CSS properties _unicode-bidi: bidi-override;_ and _direction: rtl;_
 
 ## Use
 
@@ -144,7 +144,7 @@ Component was tested on following browsers:
 - Internet Explorer 11
 
 ## Disclaimer
-This solution will work while crawler does not detect it. Technicaly is it still possible de retrieve whole text but the component make it harder.
+This solution will work while crawler does not detect it. Technicaly is it still possible to retrieve whole text but the component makes it harder.
 
 ## License
 
