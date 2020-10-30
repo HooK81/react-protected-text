@@ -1,6 +1,6 @@
 # react-protected-text
 
-React component for text & link protection from web crawlers / bots
+React component for text & link protection against web crawlers / bots
 
 ![Build][build-badge]
 ![Coverage][coverage-badge]
@@ -144,7 +144,7 @@ Component was tested on following browsers:
 - Internet Explorer 11
 
 ## Disclaimer
-This solution will work while crawler does not detect it. Technicaly is it still possible to retrieve whole text but the component makes it harder.
+This solution will work while crawlers do not detect it. Technicaly it is still possible to retrieve whole text but the component makes it harder.
 
 ## License
 

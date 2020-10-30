@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.2 - 2020-10-30
+
+### Changed
+
+- Typos in README
+
 ## 1.1.0 - 2020-10-24
 
 ### Added
