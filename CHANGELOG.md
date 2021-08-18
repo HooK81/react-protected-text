@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.3 - 2021-08-18
+
+### Changed
+
+- Dependencies Security Fix
+
 ## 1.1.2 - 2020-10-30
 
 ### Changed
